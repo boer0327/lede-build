@@ -12,9 +12,13 @@ on:
     types: started
 
 env:
+ REPO_URL: https://github.com/coolsnowwolf/lede
+ REPO_BRANCH: master
+ FEEDS_CONF: feeds.conf.default
  SSH_ACTIONS: false
  TZ: Asia/Shanghai
  DIY_SH: diy.sh
+ DIY_P1_SH: diy_feed.sh
 
 
 jobs:
@@ -56,13 +60,20 @@ jobs:
           sudo -E apt-get -y autoremove --purge
           sudo -E apt-get clean
   
+      - name: Clone source code
+        run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
 
+      - name: Load custom feeds
+        run: |
+          [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+          chmod +x $DIY_P1_SH
+          cd openwrt
+          ../$DIY_P1_SH
+        
       - name: Update feeds
         run: |
           ./scripts/feeds update -a
-          ./scripts/feeds install -a
-          
-          
+          ./scripts/feeds install -a    
           
       - name: SSH connection to Actions
         uses: P3TERX/debugger-action@master
