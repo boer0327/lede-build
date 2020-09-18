@@ -1,13 +1,13 @@
 name: lede-x64
 
 on:
-#  push:
-#    branches: 
-#      - master
-  # schedule:
-  #   - cron: 0 20 * * *
-  # release:
-  #   types: [published]
+  release:
+    types: published
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: 0 8 * * 5
   watch:
     types: started
 
@@ -71,9 +71,10 @@ jobs:
           ../$DIY_P1_SH
         
       - name: Update feeds
-        run: |
-          ./scripts/feeds update -a
-          ./scripts/feeds install -a    
+        run: cd openwrt && ./scripts/feeds update -a
+
+      - name: Install feeds
+        run: cd openwrt && ./scripts/feeds install -a  
           
       - name: SSH connection to Actions
         uses: P3TERX/debugger-action@master
@@ -82,10 +83,11 @@ jobs:
 
       - name: Costom configure file
         run: |
+          cd openwrt
           rm -f ./.config*
           touch ./.config
           chmod +x $DIY_SH
-          ./$DIY_SH
+          ../$DIY_SH
           #
           # ========================固件定制部分========================
           
@@ -128,22 +130,29 @@ jobs:
           # 
           sed -i 's/^[ \t]*//g' ./.config
           make defconfig
+          
       - name: Make download
         run: |
+          cd openwrt
           make download -j8
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
+          
       - name: Compile firmware
         run: |
+          cd openwrt
           echo -e "$(nproc) thread build."
           make -j$(nproc) V=s
+          
       - name: Assemble artifact
         run: |
           rm -rf ./artifact/
           mkdir -p ./artifact/
-          find ./bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./artifact/
-          find ./bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ./artifact/
-          mv .config ./artifact/
+          cd openwrt
+          find ./bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ../artifact/
+          find ./bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ../artifact/
+          mv .config ../artifact/
+          
       - name: Upload artifact
         uses: actions/upload-artifact@master
         with:
