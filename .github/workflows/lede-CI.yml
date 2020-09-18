@@ -83,10 +83,10 @@ jobs:
 
       - name: Costom configure file
         run: |
+          chmod +x $DIY_SH
           cd openwrt
           rm -f ./.config*
           touch ./.config
-          chmod +x $DIY_SH
           ../$DIY_SH
           #
           # ========================固件定制部分========================
