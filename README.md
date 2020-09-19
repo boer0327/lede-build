@@ -1,7 +1,7 @@
 # LEDE Build CI
 
 ## Settings
-### Modify CPU Settings:
+##### Modify CPU Settings:
 ```
 cat >> .config <<EOF
 CONFIG_TARGET_ramips=y
