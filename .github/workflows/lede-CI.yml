@@ -8,8 +8,8 @@ on:
       - master
   schedule:
     - cron: 0 8 * * 5
-  watch:
-    types: started
+#   watch:
+#     types: started
 
 env:
  REPO_URL: https://github.com/coolsnowwolf/lede
@@ -98,7 +98,7 @@ jobs:
           CONFIG_PACKAGE_luci-app-vsftpd=n
           CONFIG_PACKAGE_luci-app-vlmcsd=n
           CONFIG_PACKAGE_luci-app-zerotier=n
-          CONFIG_PACKAGE_luci-app-koolproxyR=y
+          CONFIG_PACKAGE_luci-app-koolproxyR=n
           CONFIG_PACKAGE_luci-theme-argon=y
           EOF
           
