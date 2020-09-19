@@ -2,11 +2,13 @@
 
 ## Settings
 ### Modify CPU Settings:
+```
 cat >> .config <<EOF
 CONFIG_TARGET_ramips=y
 CONFIG_TARGET_ramips_mt7620=y
 CONFIG_TARGET_ramips_mt7620_DEVICE_hiwifi_hc5861=y
 EOF
+```
 
 ## Package Lists:
 
