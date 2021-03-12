@@ -90,7 +90,10 @@ jobs:
           cat >> .config <<EOF          
           CONFIG_TARGET_x86=y
           CONFIG_TARGET_x86_generic=y
-          CONFIG_TARGET_x86_generic_Generic=y
+          CONFIG_TARGET_x86_generic_DEVICE_generic=y
+          CONFIG_TARGET_KERNEL_PARTSIZE=64
+          CONFIG_TARGET_ROOTFS_PARTSIZE=960
+          CONFIG_GRUB_IMAGES=y
           CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Trojan=y
           CONFIG_PACKAGE_luci-app-wol=n
           CONFIG_PACKAGE_luci-app-upnp=n
